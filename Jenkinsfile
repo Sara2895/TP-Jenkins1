@@ -3,35 +3,23 @@ pipeline {
 
     stages {
 
-        stage('Clone Repository') {
-            steps {
-                git 'https://github.com/Sara2895/TP-Jenkins.git'
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
-                sh 'pip3 install -r requirements.txt'
+                bat 'pip install -r requirements.txt'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'pytest'
+                bat 'pytest'
             }
         }
 
-        stage('SCA Scan') {
+        stage('Security Scan') {
             steps {
-                sh 'dependency-check.sh --project "TP-Jenkins" --scan . --format HTML'
+                bat 'dependency-check.bat --project "TP-Jenkins" --scan . --format HTML'
             }
         }
 
-    }
-
-    post {
-        failure {
-            echo 'Build failed due to errors or vulnerabilities'
-        }
     }
 }
